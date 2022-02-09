@@ -1,26 +1,11 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import Icon from './Icon';
+import { createStore } from 'vuex';
+import state from '../store/state';
+import mutations from '../store/mutations';
+import actions from '../store/actions';
 
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
-  state: {
-    Icon,
-    number: 0
-  },
-  mutations: {
-    setNumber: (state, payload) => state.number = payload,
-  },
-  actions: {
-    setNumber: ({ commit }, payload) => commit('setNumber', payload),
-  }
+export default createStore({
+  state,
+  mutations,
+  actions,
 });
 
-export const eventBus = new Vue({
-  methods: {
-
-  }
-});
-
-export default store;

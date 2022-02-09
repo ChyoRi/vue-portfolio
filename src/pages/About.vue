@@ -17,6 +17,7 @@
 
 <script>
 export default {
+  name: 'About',
   data: () => ({
     list: [
       {name: 'vue', url: 'https://kr.vuejs.org/v2/guide/index.html'},

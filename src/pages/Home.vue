@@ -10,16 +10,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
+  name: 'Home',
   methods: {
     upDownFn (n) {
-      this.$store.dispatch('setNumber', this.number + n);
+      this.$store.commit('setNumber', this.number + n);
     }
   },
   computed: {
-    number() {
-      return this.$store.state.number;
-    }
+    ...mapState([
+      'number'
+    ])
   }
 }
 </script>

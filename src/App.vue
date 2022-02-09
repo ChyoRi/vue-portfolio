@@ -2,16 +2,22 @@
   <main>
     <Header />
     <i :class="$store.state.Icon.stroke.v" />
-    <transition name="scale-transition" mode="out-in">
-      <router-view />
-    </transition>
+
+    <router-view v-slot="{ Component, route }">
+      <transition :name="route.meta.transition" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </main>
 </template>
 
 <script>
+import { useComponent } from '@hook';
+
 export default {
+  name: 'App',
   components: {
-    Header: () => import('@pages/Common/Header'),
+    Header: useComponent(() => import('@/pages/Common/Header'))
   },
 }
 </script>

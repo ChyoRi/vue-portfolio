@@ -1,4 +1,6 @@
 /* eslint-disable default-case */
+import { defineAsyncComponent } from '@vue/runtime-core';
+
 NodeList.prototype.all = function (fn) {this.forEach((el, idx) => fn(el, idx))}
 export const useEl = (el = null) => document.querySelector(el);
 export const useEls = (el = null) => document.querySelectorAll(el);
@@ -460,15 +462,16 @@ export const useAlert = {
       progress: 'rgb(61 52 52)'
     }
   },
-  style () {
+  style (isMobile) {
     return `
       <style>
         section[alert] {
           position: fixed;
           top: -100px;
-          right: 10px;
-          width: 400px;
-          height: 70px;
+          right: ${isMobile ? '50%' : '10px'};
+          width: ${isMobile ? 'calc(100% - 40px)' : '400px'};
+          transform: ${isMobile ? 'translateX(50%)' : 'unset'};
+          height: ${isMobile ? '50px' : '70px'};
           background-color: #fff;
           border-radius: 4px;
           box-shadow: 0px 2px 6px #00000050;
@@ -482,24 +485,26 @@ export const useAlert = {
           height: 100%;
           display: flex;
           justify-content: space-between;
-          padding: 10px;
+          padding: ${isMobile ? '6px' : '10px'};
         }
         section[alert] > .wrap > .icon {
           width: 50px;
-          min-width: 50px;
-          font-size: 34px;
+          min-width: ${isMobile ? '38px' : '50px'};
+          font-size: ${isMobile ? '26px' : '34px'};
           display: flex;
           align-items: center;
           justify-content: center;
         }
         section[alert] > .wrap > .context {
-          padding: 0 10px;
-          width: calc(100% - 64px);
+          padding: 0 ${isMobile ? '3px' : '10px'};
+          width: calc(100% - ${isMobile ? '50px' : '64px'});
         }
         section[alert] > .wrap > .context > .title {
           font-weight: 500;
           letter-spacing: .5px;
-          height: 50%;
+          height: ${isMobile ? '48%' : '50%'};
+          margin: 0;
+          font-size: ${isMobile ? '12px' : '16px'};
         }
         section[alert] > .wrap > .context > .text {
           font-size: 13px;
@@ -510,6 +515,7 @@ export const useAlert = {
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
+          margin: 0;
         }
         section[alert] .progress {
           position: absolute;
@@ -530,7 +536,7 @@ export const useAlert = {
           height: 14px;
           background: transparent;
           border: none;
-          display: flex;
+          display: ${isMobile ? 'none' : 'flex'};
           align-items: center;
           justify-content: center;
           font-size: 16px;
@@ -539,17 +545,19 @@ export const useAlert = {
         section[alert] .xBtn:hover {
           box-shadow: none;
           opacity: 1;
+          background: transparent;
         }
       </style>
     `;
   },
-  init (skin = this.skin.info, title = this.title, text = this.text) {
+  init (skin = this.skin.info, title = this.title, text = this.text, isMobile) {
     let count = document.querySelectorAll('section[alert]').length;
     let dom = document.createElement('section');
     dom.setAttribute('alert', '');
     dom.style.backgroundColor = skin.bg;
     dom.style.color = skin.txt;
     dom.style.top = '-100px';
+
     dom.innerHTML = `
       <div class="wrap">
         <div class="icon"><i class="${skin.icon}"></i></div>
@@ -558,45 +566,49 @@ export const useAlert = {
         <article class="progress"><div style="
           background-color: ${skin.progress}
         "></div>
-      </div>${this.style()}
+      </div>${this.style(isMobile)}
     `;
     document.body.appendChild(dom);
     let xBtn = dom.children[0].children[2];
     let progress = dom.children[0].children[3].children[0];
-    xBtn.onclick = () => this.close(dom);
+    if (isMobile) {
+      dom.onclick = () => this.close(dom);
+    } else {
+      xBtn.onclick = () => this.close(dom);
+    }
     window.setTimeout(() => {
-      dom.style.top = 80 * count + 10 + 'px';
+      dom.style.top = 60 * count + 10 + 'px';
       progress.style.width = '100%';
     }, 0);
     this.autoClose(dom);
   },
-  info (title, text) {
-    this.init(this.skin.info, title, text);
+  info (title, text, isMobile = false) {
+    this.init(this.skin.info, title, text, isMobile);
   },
-  success (title, text) {
-    this.init(this.skin.success, title, text);
+  success (title, text, isMobile = false) {
+    this.init(this.skin.success, title, text, isMobile);
   },
-  warn (title, text) {
-    this.init(this.skin.warn, title, text);
+  warn (title, text, isMobile = false) {
+    this.init(this.skin.warn, title, text, isMobile);
   },
-  error (title, text) {
-    this.init(this.skin.error, title, text);
+  error (title, text, isMobile = false) {
+    this.init(this.skin.error, title, text, isMobile);
   },
-  other (title, text) {
-    this.init(this.skin.other, title, text);
+  other (title, text, isMobile = false) {
+    this.init(this.skin.other, title, text, isMobile);
   },
   close (el) {
     el.style.top = '-100px';
     el.style.transitionDelay = '0s';
-    window.setTimeout(() => el.remove(), 300);
+    window.setTimeout(() => el.remove(), 330); // 3300
   },
   autoClose (el) {
     window.setTimeout(() => {
       el.style.transitionDelay = '3s';
       el.style.top = '-100px';
       el.style.transitionDelay = '0s';
-    }, 3000);
-    window.setTimeout(() => el.remove(), 3300);
+    }, 3300);
+    window.setTimeout(() => el.remove(), 3630);
   },
 }
 
@@ -683,3 +695,13 @@ export const useForm = (data = {}, files = {}) => {
 
   return form;
 }
+
+// getCookie 
+export const useCookie = (name) => {
+  const value = "; " + document.cookie;
+  const parts = value.split("; " + name + "=");
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
+
+// Vue Component Import
+export const useComponent = (option) => defineAsyncComponent(option);
