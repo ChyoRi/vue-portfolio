@@ -6,8 +6,9 @@
       </thead>
       <tbody>
         <tr v-for="(item, idx) in list" :key="idx">
-          <td :title="title" @click="click(item.url)">
-            {{ item.name }}<small v-text="title" />
+          <td :title="title">
+            <span v-text="item.name" />
+            <small v-text="title" @click="click(item.url)" />
           </td>
         </tr>
       </tbody>
@@ -43,15 +44,14 @@ export default {
 <style lang="scss" scoped>
 @import '@index.scss';
 td {
-  cursor: pointer;
-
-  & > small {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
+  small {
+    @include position(absolute, 50%, 10px, null, null, translateY(-50%));
     display: none;
     color: $gray;
+    cursor: pointer;
+    &:hover {
+      color: $black;
+    }
   }
 
   &:hover > small {

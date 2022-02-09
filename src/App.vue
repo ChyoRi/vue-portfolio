@@ -25,9 +25,8 @@ export default {
 <style lang="scss" scoped>
 @import '@index.scss';
 main {
-  flex-flow: column;
-  @include flex-center;
-  @include absolute-center;
+  @include flex(center, column);
+  @include position(absolute, 50%, unset, unset, 50%, translate(-50%, -50%));
 
   @keyframes colorChange {
     0% {color: $darkGray}
@@ -44,7 +43,7 @@ main {
   }
   i {
     font-size: 40px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     transition: .2s;
     animation: colorChange infinite 10s;
   }

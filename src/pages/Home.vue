@@ -35,9 +35,8 @@ section {
     color: $green;
   }
   p {
+    @include font(16px, 500);
     padding: 50px 0 20px;
-    font-weight: 500;
-    font-size: 16px;
   }
 }
 </style>

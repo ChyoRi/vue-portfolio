@@ -1,4 +1,4 @@
-import Icon from '../plugins/Icon';
+import Icon from '@plugins/Icon';
 
 export default {
   Icon,
