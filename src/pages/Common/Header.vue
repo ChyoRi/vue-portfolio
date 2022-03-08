@@ -13,7 +13,8 @@ export default {}
 <style lang="scss" scoped>
 @import '@index.scss';
 header {
-  margin-bottom: 50px;
+  @include size(100%, $headerHeight);
+  border-bottom: 1px solid red;
 
   a {
     color: $whiteGray;

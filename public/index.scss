@@ -29,6 +29,8 @@ $index5: 25;
 $index6: 30;
 $index9: 99999999999999999999;
 
+$headerHeight: 70px;
+
 // Mixin
 @mixin flex($dir: flex-start, $option: row, $wrap: nowrap) {
   display: flex;
